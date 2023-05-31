@@ -12,7 +12,7 @@ class ConditionnedGlutton:
 
         # initial glutton algo
         if n is None:
-            for i in range(1, len(elements)):
+            for i in range(1, len(elements) + 1):
                 result = self.glutton_search(T, elements, i)
                 if result is not None:
                     return result
