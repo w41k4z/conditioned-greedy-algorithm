@@ -21,29 +21,36 @@ class ConditionnedGlutton:
         else:
             return self.glutton_search(T, elements, n)
 
+    # core method solving
     def glutton_search(self, T, arr=[], n=1):
         if T is None:
             raise Exception("The target 'T' is not defined")
 
         # This refers to the basic find() method
         if n == 1:
-            for element in arr:
-                if element == T:
-                    return [element]
-            return None
+            element_index = NumberArray.dichotomous_search(T, arr, True)
+            return arr[element_index] if element_index is not None else None
 
         # This is the main purpose of this method
         # Here we can solve the search
         elif n == 2:
             for index in range(len(arr)):
                 header = arr[index]
-                couple_index = NumberArray.dichotomous_search(
+
+                # no need to continue the search if the last element + the header is less than T
+                if header + arr[-1] < T:
+                    continue
+                # As the array is sorted, there is no solution if this condition is true
+                if header > T or header + arr[index + 1] > T:
+                    return None
+
+                tail_coupled_index = NumberArray.dichotomous_search(
                     T - header, arr[index+1:], True)
-                if couple_index is not None:
-                    return [header] + [arr[couple_index+index+1]]
+                if tail_coupled_index is not None:
+                    return [header] + [arr[tail_coupled_index + index + 1]]
             return None
 
-        # This part will recursively be redirected to the above step to be solved
+        # This case will recursively be redirected to the above step to be solved
         else:
             for index in range(len(arr)):
                 header = arr[index]
